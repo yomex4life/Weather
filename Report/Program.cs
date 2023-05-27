@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Report.BusinessLogic;
 using Report.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<ReportDbContext>(options => {
         options.EnableDetailedErrors();
         options.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
+builder.Services.AddScoped<IWeatherReportAggregator, WeatherReportAggregator>();
+
 
 var app = builder.Build();
 

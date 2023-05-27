@@ -14,6 +14,7 @@ builder.Services.AddDbContext<TempDbContext>(options => {
         options.EnableDetailedErrors();
         options.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
+builder.Services.AddScoped<ITemperature, TempRepo>();
 
 var app = builder.Build();
 

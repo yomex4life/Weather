@@ -32,5 +32,14 @@ namespace Precipitation.Controllers
 
             return Ok(precip);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(DataAccess.Precipitation precip)
+        {
+            var precipitation = precip;
+            precipitation.CreatedOn = precipitation.CreatedOn.ToUniversalTime();
+            _precipitate.Add(precipitation);
+            return Ok();
+        }
     }
 }

@@ -14,6 +14,18 @@ namespace Precipitation.DataAccess
         {
             _context = context;
         }
+
+        public void Add(Precipitation precip)
+        {
+            if (precip == null)
+            {
+                throw new ArgumentNullException(nameof(precip));
+            }
+
+            _context.Precipitations.Add(precip);
+            SaveChangesAsync();
+        }
+
         public async Task<Precipitation> Get(Guid id)
         {
             return await _context.Precipitations.FirstOrDefaultAsync(p => p.Id == id);
@@ -27,6 +39,11 @@ namespace Precipitation.DataAccess
         public async Task<IEnumerable<Precipitation>> GetAll()
         {
             return await _context.Precipitations.ToListAsync();
+        }
+
+        public bool SaveChangesAsync()
+        {
+            return (_context.SaveChanges() >= 0);
         }
     }
 }

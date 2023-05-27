@@ -15,6 +15,7 @@ builder.Services.AddDbContext<PrecipDbContext>(options => {
         options.EnableDetailedErrors();
         options.EnableSensitiveDataLogging();
 }, ServiceLifetime.Transient);
+builder.Services.AddScoped<IPrecipitate, Precipitate>();
 
 var app = builder.Build();
 
