@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Precipitation.DataAccess;
 
 namespace Precipitation.Controllers
 {
@@ -10,21 +11,26 @@ namespace Precipitation.Controllers
     [Route("api/[controller]")]
     public class PrecipitationController : ControllerBase
     {
-        public PrecipitationController()
+        private readonly IPrecipitate _precipitate;
+
+        public PrecipitationController(IPrecipitate precipitate)
         {
-            
+            _precipitate = precipitate;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetAll()
+        public async Task<ActionResult<IEnumerable<DataAccess.Precipitation>>> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var precipitations = await _precipitate.GetAll();
+            return Ok(precipitations);
         }
 
         [HttpGet("{observation}/{zip}")]
-        public ActionResult<string> Get(string zip)
+        public async Task<ActionResult<string>> Get(string zip)
         {
-            return $"Zip: : {zip}";
+            var precip = await _precipitate.Get(zip);
+
+            return Ok(precip);
         }
     }
 }
