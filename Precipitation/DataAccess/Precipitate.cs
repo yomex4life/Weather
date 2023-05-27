@@ -31,11 +31,6 @@ namespace Precipitation.DataAccess
             return await _context.Precipitations.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Precipitation> Get(string zip)
-        {
-            return await _context.Precipitations.FirstOrDefaultAsync(p => p.ZipCode == zip);
-        }
-
         public async Task<IEnumerable<Precipitation>> GetAll()
         {
             return await _context.Precipitations.ToListAsync();
@@ -44,6 +39,11 @@ namespace Precipitation.DataAccess
         public bool SaveChangesAsync()
         {
             return (_context.SaveChanges() >= 0);
+        }
+
+        public async Task<IEnumerable<Precipitation>> Get(string zip)
+        {
+            return await _context.Precipitations.Where(p => p.ZipCode == zip).ToListAsync();
         }
     }
 }

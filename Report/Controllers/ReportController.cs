@@ -19,9 +19,9 @@ namespace Report.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string zip, int days)
+        public async Task<IActionResult> Get(string zip)
         {
-            var report = await _aggregator.BuildWeeklyReport(zip, days);
+            var report = await _aggregator.BuildWeeklyReport(zip);
             return Ok(report);
         }
     }

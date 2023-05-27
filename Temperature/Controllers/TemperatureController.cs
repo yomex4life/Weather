@@ -33,6 +33,15 @@ namespace Temperature.Controllers
             return Ok(temp);
         }
 
+        [HttpGet("{zip}")]
+        public async Task<ActionResult<IEnumerable<DataAccess.Temperature>>> GetByZip(string zip)
+        {
+            var temp = await _temperature.Get(zip);
+
+            return Ok(temp);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> Post(DataAccess.Temperature temp)
         {

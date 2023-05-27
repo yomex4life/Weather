@@ -8,6 +8,6 @@ namespace Report.BusinessLogic
 {
     public interface IWeatherReportAggregator
     {
-        public Task<WeatherReport> BuildWeeklyReport(string zip, int days);
+        public Task<WeatherReport> BuildWeeklyReport(string zip);
     }
 }

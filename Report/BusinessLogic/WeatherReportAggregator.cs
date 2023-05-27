@@ -24,16 +24,16 @@ namespace Report.BusinessLogic
             _config = config.Value;
             _context = context;
         }
-        public async Task<WeatherReport> BuildWeeklyReport(string zip, int days)
+        public async Task<WeatherReport> BuildWeeklyReport(string zip)
         {
             var httpClient = _factory.CreateClient();
-            var precipData = await FetchPrecipitationData(httpClient, zip, days);
+            var precipData = await FetchPrecipitationData(httpClient, zip);
             var totalSnow = GetTotalSnow(precipData);
             var totalRain = GetTotalRain(precipData);
             _logger.LogInformation($"Total snow: {totalSnow} inches");
             _logger.LogInformation($"Total rain: {totalRain} inches");
             
-            var tempData = await FetchTemperatureData(httpClient, zip, days);
+            var tempData = await FetchTemperatureData(httpClient, zip);
             var averageHighTemp = tempData.Average(t => t.TempHighF);
             var averageLowTemp = tempData.Average(t => t.TempLowF);
 
@@ -68,27 +68,27 @@ namespace Report.BusinessLogic
             return Math.Round(totalSnow, 2);
         }
 
-        private async Task<List<TemperatureModel>> FetchTemperatureData(HttpClient httpClient, string zip, int days)
+        private async Task<List<TemperatureModel>> FetchTemperatureData(HttpClient httpClient, string zip)
         {
-            var endpoint = BuildTemperatureEndpoint(zip, days);
+            var endpoint = BuildTemperatureEndpoint(zip);
             var temperatureRecords = await httpClient.GetAsync(endpoint);
             var temperatureData = await temperatureRecords.Content.ReadFromJsonAsync<List<TemperatureModel>>();
 
             return temperatureData ?? new List<TemperatureModel>();
         }
 
-        private string? BuildTemperatureEndpoint(string zip, int days)
+        private string? BuildTemperatureEndpoint(string zip)
         {
             var tempServiceProtocol = _config.TempDataProtocol;
             var tempServiceHost = _config.TempDataHost;
             var tempServicePort = _config.TempDataPort;
             //return $"{tempServiceProtocol}://{tempServiceHost}:{tempServicePort}/api/temperature?zip={zip}&days={days}"
-            return $"{tempServiceProtocol}://{tempServiceHost}:{tempServicePort}/api/temperature";
+            return $"{tempServiceProtocol}://{tempServiceHost}:{tempServicePort}/api/temperature/{zip}";
         }
 
-        private async Task<List<PrecipitationModel>> FetchPrecipitationData(HttpClient httpClient, string zip, int days)
+        private async Task<List<PrecipitationModel>> FetchPrecipitationData(HttpClient httpClient, string zip)
         {
-            var endpoint = BuildPrecipitationEndpoint(zip, days);
+            var endpoint = BuildPrecipitationEndpoint(zip);
             var precipitationRecords = await httpClient.GetAsync(endpoint);
             //var precipitationData = await precipitationRecords.Content.ReadFromJsonAsync<List<PrecipitationModel>>();
 
@@ -103,13 +103,13 @@ namespace Report.BusinessLogic
             return precipData ?? new List<PrecipitationModel>();
         }
 
-        private string? BuildPrecipitationEndpoint(string zip, int days)
+        private string? BuildPrecipitationEndpoint(string zip)
         {
             var precipServiceProtocol = _config.PrecipDataProtocol;
             var precipServiceHost = _config.PrecipDataHost;
             var precipServicePort = _config.PrecipDataPort;
             //return $"{precipServiceProtocol}://{precipServiceHost}:{precipServicePort}/api/precipitation?zip={zip}&days={days}"
-            return $"{precipServiceProtocol}://{precipServiceHost}:{precipServicePort}/api/precipitation";
+            return $"{precipServiceProtocol}://{precipServiceHost}:{precipServicePort}/api/precipitation/{zip}";
         }
     }
 }

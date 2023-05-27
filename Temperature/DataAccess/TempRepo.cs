@@ -30,9 +30,9 @@ namespace Temperature.DataAccess
             return await _context.Temperatures.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<Temperature> Get(string zip)
+        public async Task<IEnumerable<Temperature>> Get(string zip)
         {
-            return await _context.Temperatures.FirstOrDefaultAsync(t => t.Zipcode == zip);
+            return await _context.Temperatures.Where(t => t.Zipcode == zip).ToListAsync();
         }
 
         public async Task<IEnumerable<Temperature>> GetAll()

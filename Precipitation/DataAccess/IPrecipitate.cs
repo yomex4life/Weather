@@ -11,7 +11,7 @@ namespace Precipitation.DataAccess
 
         Task<Precipitation> Get(Guid id);
 
-        Task<Precipitation> Get(string zip);
+        Task<IEnumerable<Precipitation>> Get(string zip);
 
         void Add(Precipitation precip);
 

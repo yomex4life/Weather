@@ -25,8 +25,8 @@ namespace Precipitation.Controllers
             return Ok(precipitations);
         }
 
-        [HttpGet("{observation}/{zip}")]
-        public async Task<ActionResult<string>> Get(string zip)
+        [HttpGet("{zip}")]
+        public async Task<ActionResult<IEnumerable<DataAccess.Precipitation>>> GetByZip(string zip)
         {
             var precip = await _precipitate.Get(zip);
 
