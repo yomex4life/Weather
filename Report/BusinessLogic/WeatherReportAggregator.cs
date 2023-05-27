@@ -71,8 +71,15 @@ namespace Report.BusinessLogic
         private async Task<List<TemperatureModel>> FetchTemperatureData(HttpClient httpClient, string zip)
         {
             var endpoint = BuildTemperatureEndpoint(zip);
+            Console.WriteLine($"Fetching temperature data from {endpoint}");
             var temperatureRecords = await httpClient.GetAsync(endpoint);
-            var temperatureData = await temperatureRecords.Content.ReadFromJsonAsync<List<TemperatureModel>>();
+
+            var jsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            var temperatureData = await temperatureRecords.Content.ReadFromJsonAsync<List<TemperatureModel>>(jsonSerializerOptions);
 
             return temperatureData ?? new List<TemperatureModel>();
         }
@@ -106,8 +113,11 @@ namespace Report.BusinessLogic
         private string? BuildPrecipitationEndpoint(string zip)
         {
             var precipServiceProtocol = _config.PrecipDataProtocol;
+            Console.WriteLine($"precipServiceProtocol: {precipServiceProtocol}");
             var precipServiceHost = _config.PrecipDataHost;
+            Console.WriteLine($"precipServiceHost: {precipServiceHost}");
             var precipServicePort = _config.PrecipDataPort;
+            Console.WriteLine($"precipServicePort: {precipServicePort}");
             //return $"{precipServiceProtocol}://{precipServiceHost}:{precipServicePort}/api/precipitation?zip={zip}&days={days}"
             return $"{precipServiceProtocol}://{precipServiceHost}:{precipServicePort}/api/precipitation/{zip}";
         }

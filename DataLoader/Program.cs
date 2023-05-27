@@ -14,6 +14,7 @@ var ServicesConfig = config.GetSection("Services");
 var tempServiceConfig = ServicesConfig.GetSection("Temperature");
 var tempServiceHost = tempServiceConfig["Host"];
 var tempServicePort = tempServiceConfig["Port"];
+Console.WriteLine($"Temperature Service: {tempServiceHost}:{tempServicePort}");
 
 var precipServiceConfig = ServicesConfig.GetSection("Precipitation");
 var precipServiceHost = precipServiceConfig["Host"];

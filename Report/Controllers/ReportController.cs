@@ -18,9 +18,10 @@ namespace Report.Controllers
             _aggregator = aggregator;
         }
 
-        [HttpGet]
+        [HttpGet("{zip}")]
         public async Task<IActionResult> Get(string zip)
         {
+            Console.WriteLine($"Getting report for {zip}");
             var report = await _aggregator.BuildWeeklyReport(zip);
             return Ok(report);
         }
